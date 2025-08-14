@@ -40,7 +40,7 @@ contract TokenICO {
     //state variables
     address public immutable owner;
     address public saleToken;
-    uint256 public ethPriceFortoken = 0.001 ether;
+    uint256 public ethPriceForToken = 0.001 ether;
     uint256 public tokensSold;
 
     //EVENTS
@@ -86,8 +86,8 @@ contract TokenICO {
     function updateTokenPrice(uint256 newPrice) external onlyOwner {
         if(newPrice === 0) revert InvalidPrice();
 
-        uint256 oldPrice = ethPriceFortoken;
-        ethPriceFortoken = newPrice;
+        uint256 oldPrice = ethPriceForToken;
+        ethPriceForToken = newPrice;
         emit PriceUpdated(oldPrice, newPrice);
     }
 
@@ -103,11 +103,35 @@ contract TokenICO {
 
         if(balance == 0) revert NoTokensToWithdraw();
 
-        if(!IERC20(token).transfer(owner,balance)) TokenTransferFailed();
+        if(!IERC20(token).transfer(owner,balance)) revert TokenTransferFailed();
     }
 
     //user functions
-    function buyToken() external payable {}
+    function buyToken() external payable {
+        if(msg.value == 0) revert NoEthSent();
+
+        address token = saleToken;
+        if(token == address(0)) revert SaleTokenNotSet();
+
+        //calculate token amount according token decimals
+        IERC20 tokenContract = IERC20(token);
+        uint8 decimals = tokenContract.decimals();
+        uint256 tokenAmount = (msg.value * (10**decimals)) / ethPriceForToken;
+
+        //process token purchase
+        unchecked {
+            tokensSold += tokenAmount;
+        }
+
+        //token transfer
+        if(!tokenContract.transfer(msg.sender, tokenAmount)) revert TokenTransferFailed();
+
+        //eth transfer to owner
+        (bool success,)= owner.call{value: msg.value}("");
+        if(!success) revert EthTranferFailed();
+
+        emit TokensPurchased(msg.sender, msg.value, tokenAmount);
+    }
 
     function rescueTokens() external onlyOwner {}
 
