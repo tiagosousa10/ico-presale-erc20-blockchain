@@ -65,19 +65,46 @@ contract TokenICO {
     error NoTokensToRescue();
     error UseTokenFunction();
 
-    modifier onlyOwner() {}
+    modifier onlyOwner() {
+        if (msg.sender != owner) {
+            revert OnlyOwner();
+        }
 
-    constructor() {}
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     //PREVENT DIRECT ETH TRANSFERS
-    receive() external payable {}
+    receive() external payable {
+        revert UseTokenFunction();
+    }
 
     //admin functions
-    function updateTokenPrice() external onlyOwner {}
+    function updateTokenPrice(uint256 newPrice) external onlyOwner {
+        if(newPrice === 0) revert InvalidPrice();
 
-    function setSaleToken() external onlyOwner {}
+        uint256 oldPrice = ethPriceFortoken;
+        ethPriceFortoken = newPrice;
+        emit PriceUpdated(oldPrice, newPrice);
+    }
 
-    function withdrawAllTokens() external onlyOwner {}
+    function setSaleToken(address _token) external onlyOwner {
+        if(_token == address(0)) revert InvalidAddress();
+        saleToken = _token;
+        emit SaleTokenSet(_token);
+    }
+
+    function withdrawAllTokens() external onlyOwner {
+        address token = saleToken;
+        uint256 balance = IERC20(token).balanceOf(address(this));
+
+        if(balance == 0) revert NoTokensToWithdraw();
+
+        if(!IERC20(token).transfer(owner,balance)) TokenTransferFailed();
+    }
 
     //user functions
     function buyToken() external payable {}
