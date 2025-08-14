@@ -18,14 +18,39 @@ pragma solidity ^0.8.0;
  */
 
 interface IERC20 {
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
 
+    function balanceOf(address account) external view returns (uint256);
+
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
+
+    function symbol() external view returns (string memory);
+
+    function decimals() external view returns (uint8);
 }
 
 contract TokenICO {
+    //state variables
+    address public immutable owner;
+    address public saleToken;
+    uint256 public ethPriceFortoken = 0.001 ether;
+    uint256 public tokensSold;
+
     //EVENTS
-    event TokensPurchased();
-    event PriceUpdated();
-    event SaleTokenSet();
+    event TokensPurchased(
+        address indexed buyer,
+        uint256 amountPaid,
+        uint256 tokensBought
+    );
+    event PriceUpdated(uint256 oldPrice, uint256 newPrice);
+    event SaleTokenSet(address indexed token);
 
     //CUSTOM ERRORS
     error OnlyOwner();
@@ -53,4 +78,12 @@ contract TokenICO {
     function setSaleToken() external onlyOwner {}
 
     function withdrawAllTokens() external onlyOwner {}
+
+    //user functions
+    function buyToken() external payable {}
+
+    function rescueTokens() external onlyOwner {}
+
+    //view functions
+    function getContractInfo() external view returns () {}
 }
