@@ -133,8 +133,38 @@ contract TokenICO {
         emit TokensPurchased(msg.sender, msg.value, tokenAmount);
     }
 
-    function rescueTokens() external onlyOwner {}
+    function rescueTokens(address tokenAddress) external onlyOwner {
+        if(tokenAddress == saleToken) revert CannotRescueSaleToken();
 
+        IERC20 tokenContract = IERC20(tokenAddress);
+        uint256 balance = tokenContract.balanceOf(address(this));
+
+        if(balance == 0) revert NoTokensToRescue();
+
+        if(!tokenContract.transfer(owner, balance)) revert TokenTransferFailed();
+
+
+    }   
+ 
     //view functions
-    function getContractInfo() external view returns () {}
+    function getContractInfo() external view returns (
+    address tokenAddress,
+    string memory tokenSymbol,
+    uint8 tokenDecimals,
+    uint256 tokenBalance,
+    uint256 ethPrice,
+    uint256 tokensSold
+    ) {
+      address token = saleToken;
+      IERC20 tokenContract = IERC20(token);
+
+      return (
+        token,
+        tokenContract.symbol(),
+        tokenContract.decimals(),
+        tokenContract.balanceOf(address(this)),
+        ethPriceForToken,
+        tokensSold
+      )  
+    }
 }
