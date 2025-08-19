@@ -84,7 +84,7 @@ contract TokenICO {
 
     //admin functions
     function updateTokenPrice(uint256 newPrice) external onlyOwner {
-        if(newPrice === 0) revert InvalidPrice();
+        if (newPrice == 0) revert InvalidPrice();
 
         uint256 oldPrice = ethPriceForToken;
         ethPriceForToken = newPrice;
@@ -92,7 +92,7 @@ contract TokenICO {
     }
 
     function setSaleToken(address _token) external onlyOwner {
-        if(_token == address(0)) revert InvalidAddress();
+        if (_token == address(0)) revert InvalidAddress();
         saleToken = _token;
         emit SaleTokenSet(_token);
     }
@@ -101,22 +101,23 @@ contract TokenICO {
         address token = saleToken;
         uint256 balance = IERC20(token).balanceOf(address(this));
 
-        if(balance == 0) revert NoTokensToWithdraw();
+        if (balance == 0) revert NoTokensToWithdraw();
 
-        if(!IERC20(token).transfer(owner,balance)) revert TokenTransferFailed();
+        if (!IERC20(token).transfer(owner, balance))
+            revert TokenTransferFailed();
     }
 
     //user functions
     function buyToken() external payable {
-        if(msg.value == 0) revert NoEthSent();
+        if (msg.value == 0) revert NoEthSent();
 
         address token = saleToken;
-        if(token == address(0)) revert SaleTokenNotSet();
+        if (token == address(0)) revert SaleTokenNotSet();
 
         //calculate token amount according token decimals
         IERC20 tokenContract = IERC20(token);
         uint8 decimals = tokenContract.decimals();
-        uint256 tokenAmount = (msg.value * (10**decimals)) / ethPriceForToken;
+        uint256 tokenAmount = (msg.value * (10 ** decimals)) / ethPriceForToken;
 
         //process token purchase
         unchecked {
@@ -124,47 +125,51 @@ contract TokenICO {
         }
 
         //token transfer
-        if(!tokenContract.transfer(msg.sender, tokenAmount)) revert TokenTransferFailed();
+        if (!tokenContract.transfer(msg.sender, tokenAmount))
+            revert TokenTransferFailed();
 
         //eth transfer to owner
-        (bool success,)= owner.call{value: msg.value}("");
-        if(!success) revert EthTranferFailed();
+        (bool success, ) = owner.call{value: msg.value}("");
+        if (!success) revert EthTranferFailed();
 
         emit TokensPurchased(msg.sender, msg.value, tokenAmount);
     }
 
     function rescueTokens(address tokenAddress) external onlyOwner {
-        if(tokenAddress == saleToken) revert CannotRescueSaleToken();
+        if (tokenAddress == saleToken) revert CannotRescueSaleToken();
 
         IERC20 tokenContract = IERC20(tokenAddress);
         uint256 balance = tokenContract.balanceOf(address(this));
 
-        if(balance == 0) revert NoTokensToRescue();
+        if (balance == 0) revert NoTokensToRescue();
 
-        if(!tokenContract.transfer(owner, balance)) revert TokenTransferFailed();
+        if (!tokenContract.transfer(owner, balance))
+            revert TokenTransferFailed();
+    }
 
-
-    }   
- 
     //view functions
-    function getContractInfo() external view returns (
-    address tokenAddress,
-    string memory tokenSymbol,
-    uint8 tokenDecimals,
-    uint256 tokenBalance,
-    uint256 ethPrice,
-    uint256 tokensSold
-    ) {
-      address token = saleToken;
-      IERC20 tokenContract = IERC20(token);
+    function getContractInfo()
+        external
+        view
+        returns (
+            address tokenAddress,
+            string memory tokenSymbol,
+            uint8 tokenDecimals,
+            uint256 tokenBalance,
+            uint256 ethPrice,
+            uint256 tokensSold
+        )
+    {
+        address token = saleToken;
+        IERC20 tokenContract = IERC20(token);
 
-      return (
-        token,
-        tokenContract.symbol(),
-        tokenContract.decimals(),
-        tokenContract.balanceOf(address(this)),
-        ethPriceForToken,
-        tokensSold
-      )  
+        return (
+            token,
+            tokenContract.symbol(),
+            tokenContract.decimals(),
+            tokenContract.balanceOf(address(this)),
+            ethPriceForToken,
+            tokensSold
+        );
     }
 }
