@@ -20,3 +20,24 @@ export function clientProvider(client) {
 
   return new providers.JsonRpcProvider(transport.url, network);
 }
+
+export function useEthersProvider({ chainId } = {}) {
+  const client = useClient({ chainId });
+
+  return useMemo(() => (client ? clientProvider(client) : undefined), [client]);
+}
+
+export function clientToSigner(client) {
+  const { account, chain, transport } = client;
+
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+
+  const provider = new providers.Web3Provider(transport, network);
+  const signer = provider.getSigner(account.address);
+
+  return signer;
+}
