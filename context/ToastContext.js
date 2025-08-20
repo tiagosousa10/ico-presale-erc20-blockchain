@@ -94,4 +94,95 @@ export const ToastProvider = ({ children }) => {
       duration: 4000,
     });
   };
+
+  const updateToast = (id, state, message) => {
+    toast.dismiss(id);
+
+    switch (state) {
+      case "processing":
+        return showProcessing(message);
+      case "approve":
+        return showApprove(message);
+      case "complete":
+        return showComplete(message);
+      case "reject":
+        return showReject(message);
+      case "failed":
+        return showFailed(message);
+      case "info":
+      default:
+        return showInfo(message);
+    }
+  };
+
+  const notify = {
+    start: (message = "Processing transaction...") => {
+      return showProcessing(message);
+    },
+
+    update: (id, state, message) => {
+      return updateToast(id, state, message);
+    },
+
+    approve: (id, message = "Transaction approved") => {
+      return updateToast(id, "approve", message);
+    },
+
+    complete: (id, message = "Transaction completed successfully!") => {
+      return updateToast(id, "complete", message);
+    },
+
+    reject: (id, message = "Transaction rejected!") => {
+      return updateToast(id, "reject", message);
+    },
+
+    fail: (id, message = "Transaction failed!") => {
+      return updateToast(id, "failed", message);
+    },
+  };
+
+  return (
+    <ToastContext.Provider
+      value={{
+        showProcessing,
+        showApprove,
+        showComplete,
+        showReject,
+        showFailed,
+        showInfo,
+        updateToast,
+        notify,
+        toast,
+      }}
+    >
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          success: {
+            iconTheme: {
+              primary: "#22c55e",
+              secondary: "white",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "white",
+            },
+          },
+        }}
+      />
+      {children}
+    </ToastContext.Provider>
+  );
+};
+
+export const useToast = () => {
+  const context = useContext(ToastContext);
+
+  if (context === undefined) {
+    throw new Error("useToast must be used within a ToastProvider");
+  }
+
+  return context;
 };
