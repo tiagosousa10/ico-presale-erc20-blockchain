@@ -41,3 +41,9 @@ export function clientToSigner(client) {
 
   return signer;
 }
+
+export function useEtherSigner({ chainId } = {}) {
+  const { data: client } = useConnectorClient({ chainId });
+
+  return useMemo(() => (client ? clientToSigner(client) : undefined), [client]);
+}
