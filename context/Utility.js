@@ -62,3 +62,6 @@ export const erc20Abi = [
   "function approve(address spender, uint256 amount) view returns (bool)",
   "function transferFrom(address spender, address recipient, uint256 amount) view returns (bool)",
 ];
+
+export const generateId = () =>
+  `transaction-${Date.now()}-${Math.toString(36).substring(2, 5)}`;
