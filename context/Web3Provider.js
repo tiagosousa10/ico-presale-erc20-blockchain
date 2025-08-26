@@ -62,4 +62,25 @@ export const Web3Provider = ({ children }) => {
   });
 
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const initContract = () => {
+      if (provider && signer) {
+        try {
+          const contractInstance = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            TokenICOAbi,
+            signer
+          );
+
+          setContract(contractInstance);
+        } catch (error) {
+          console.error("Error initializing contract:", error);
+          setError("Failed to initialize contract");
+        }
+      }
+    };
+
+    initContract();
+  }, [provider, signer]);
 };
