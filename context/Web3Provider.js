@@ -155,4 +155,66 @@ export const Web3Provider = ({ children }) => {
 
     fetchContractInfo();
   }, [contract, address, provider, signer, reCall]);
+
+  const buyToken = async (ethAmount) => {
+    if (!contract || !address) return null;
+
+    const toastId = notify.start(`Buying ${TOKEN_SYMBOL} with ${CURRENCY}...`);
+
+    try {
+      const ethValue = ethers.utils.parseEther(ethAmount);
+
+      const tx = await contract.buyToken({
+        value: ethValue,
+      });
+
+      notify.update(toastId, "Processing", "Waiting for confirmation");
+
+      const receipt = await tx.wait();
+
+      if (receipt.status === 1) {
+        const tokenPrice = PER_TOKEN_USD_PRICE;
+        const tokensReceived = parseFloat(ethAmount) / tokenPrice;
+
+        const txDetails = {
+          timestamp: Date.now(),
+          user: address,
+          tokenIn: CURRENCY,
+          tokenOut: TOKEN_SYMBOL,
+          amountIn: ethAmount,
+          amountOut: tokensReceived.toString(),
+          transactionType: "BUY",
+          hash: receipt.transactionHash,
+        };
+
+        saveTransactionToLocalStorage(txDetails);
+
+        setReCall((prev) => prev + 1);
+
+        notify.complete(
+          toastId,
+          `Successfully purchased ${TOKEN_SYMBOL} tokens`
+        );
+
+        return receipt;
+      }
+    } catch (error) {
+      const { message: errorMessage, code: errorCode } = handleTransactionError(
+        error,
+        "buying tokens"
+      );
+
+      if (errorCode == "ACTION_REJECTED") {
+        notify.reject(toastId, "Transaction rejected by user");
+        return null;
+      }
+
+      console.error(errorMessage);
+      notify.fail(
+        toastId,
+        "Transaction failed, Please try again with sufficient gas"
+      );
+      return null;
+    }
+  };
 };
