@@ -46,7 +46,7 @@ export const Web3Provider = ({ children }) => {
   const [isConnecting, setIsConnecting] = useState(false);
 
   const [contractInfo, setContractInfo] = useState({
-    tbcaddress: null,
+    tbcAddress: null,
     tbcBalance: "0",
     ethPrice: "0",
     totalSold: "0",
@@ -83,4 +83,76 @@ export const Web3Provider = ({ children }) => {
 
     initContract();
   }, [provider, signer]);
+
+  useEffect(() => {
+    const fetchContractInfo = async () => {
+      setGlobalLoad(true);
+      try {
+        const currentProvider = provider || fallbackProvider;
+
+        const readonlyContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          TokenICOAbi,
+          currentProvider
+        );
+
+        const info = await readonlyContract.getContractInfo();
+
+        const tokenDecimals = parseInt(info.tokenDecimals) || 18;
+
+        setContract({
+          tbcAddress: info.tokenAddress,
+          tbcBalance: ethers.utils.formatUnits(
+            info.tokenBalance,
+            tokenDecimals
+          ),
+          ethPrice: ethers.utils.formatUnits(info.ethPrice, 18),
+          totalSold: ethers.utils.formatUnits(info.totalSold, tokenDecimals),
+        });
+
+        if (address && info.tokenAddress) {
+          const tokenContract = new ethers.Contract(
+            info.tokenAddress,
+            erc20Abi,
+            currentProvider
+          );
+
+          const [
+            userTokenBalance,
+            userEthBalance,
+            contractEthBalance,
+            totalSupply,
+          ] = await Promise.all([
+            tokenContract.balanceOf(address),
+            currentProvider.getBalance(address),
+            currentProvider.getBalance(CONTRACT_ADDRESS),
+            tokenContract.totalSupply(),
+          ]);
+
+          setTokenBalance({
+            ...prev,
+            usertbcBalance: ethers.utils.formatUnits(
+              userTokenBalance,
+              tokenDecimals
+            ),
+            contractEthBalance: ethers.utils.formatUnits(contractEthBalance),
+            totalSupply: ethers.utils.formatUnits(totalSupply, tokenDecimals),
+            userEthBalance: ethers.utils.formatUnits(userEthBalance),
+            ethPrice: ethers.utils.formatUnits(info.ethPrice, 18),
+            tbcBalance: ethers.utils.formatUnits(
+              info.tokenBalance,
+              tokenDecimals
+            ),
+          });
+        }
+
+        setGlobalLoad(false);
+      } catch (error) {
+        setGlobalLoad(false);
+        console.error("Error fetching contract info:", error);
+      }
+    };
+
+    fetchContractInfo();
+  }, [contract, address, provider, signer, reCall]);
 };
