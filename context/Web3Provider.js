@@ -219,16 +219,52 @@ export const Web3Provider = ({ children }) => {
   };
 
   const saveTransactionToLocalStorage = (txData) => {
-    const existingTransactions =
-      JSON.parse(localStorage.getItem("tokenTransactions")) || "[]";
+    try {
+      const existingTransactions =
+        JSON.parse(localStorage.getItem("tokenTransactions")) || "[]";
 
-    existingTransactions.push(txData);
+      existingTransactions.push(txData);
 
-    localStorage.setItem(
-      "tokenTransactions",
-      JSON.stringify(existingTransactions)
-    );
+      localStorage.setItem(
+        "tokenTransactions",
+        JSON.stringify(existingTransactions)
+      );
 
-    console.log("Transaction saved to localStorage:", txData);
+      console.log("Transaction saved to localStorage:", txData);
+    } catch (error) {}
+    console.log("Failed to saved to localStorage:", error);
+  };
+
+  const updateTokenPrice = async (newPrice) => {
+    if (!contract || !address) return null;
+
+    const toastId = notify.start(`Updating token price...`);
+
+    try {
+      const parsedPrice = ethers.utils.parseEther(newPrice);
+
+      const tx = await contract.updateTokenPrice(parsedPrice);
+
+      notify.update(toastId, "Processing", "Confirming transaction");
+
+      const receipt = await tx.wait();
+    } catch (error) {
+      const { message: errorMessage, code: errorCode } = handleTransactionError(
+        error,
+        "buying tokens"
+      );
+
+      if (errorCode == "ACTION_REJECTED") {
+        notify.reject(toastId, "Transaction rejected by user");
+        return null;
+      }
+
+      console.error(errorMessage);
+      notify.fail(
+        toastId,
+        "Transaction failed, Please try again with sufficient gas"
+      );
+      return null;
+    }
   };
 };
