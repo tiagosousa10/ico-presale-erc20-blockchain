@@ -217,4 +217,18 @@ export const Web3Provider = ({ children }) => {
       return null;
     }
   };
+
+  const saveTransactionToLocalStorage = (txData) => {
+    const existingTransactions =
+      JSON.parse(localStorage.getItem("tokenTransactions")) || "[]";
+
+    existingTransactions.push(txData);
+
+    localStorage.setItem(
+      "tokenTransactions",
+      JSON.stringify(existingTransactions)
+    );
+
+    console.log("Transaction saved to localStorage:", txData);
+  };
 };
