@@ -277,4 +277,74 @@ export const Web3Provider = ({ children }) => {
       return null;
     }
   };
+
+  const updateTokenSale = async (tokenAddress) => {
+    if (!contract || !address) return null;
+
+    const toastId = notify.start(`Setting sale token ...`);
+
+    try {
+      const tx = await contract.setSaleToken(tokenAddress);
+
+      notify.update(toastId, "Processing", "Confirming token update...");
+
+      const receipt = await tx.wait();
+
+      if (receipt.status === 1) {
+        setReCall((prev) => prev + 1);
+        notify.complete(toastId, `Sale token updated successfully`);
+
+        return receipt;
+      }
+    } catch (error) {
+      const { message: errorMessage, code: errorCode } = handleTransactionError(
+        error,
+        "Setting sale token"
+      );
+
+      if (errorCode == "ACTION_REJECTED") {
+        notify.reject(toastId, "Transaction rejected by user");
+        return null;
+      }
+
+      console.error(errorMessage);
+      notify.fail(toastId, "Failed to set sale token, Please check address");
+      return null;
+    }
+  };
+
+  const withdrawAllTokens = async () => {
+    if (!contract || !address) return null;
+
+    const toastId = notify.start(`withdraw tokens...`);
+
+    try {
+      const tx = await contract.withdrawAllTokens();
+
+      notify.update(toastId, "Processing", "Confirming withdrawal...");
+
+      const receipt = await tx.wait();
+
+      if (receipt.status === 1) {
+        setReCall((prev) => prev + 1);
+        notify.complete(toastId, `All tokens withdrawn successfully`);
+
+        return receipt;
+      }
+    } catch (error) {
+      const { message: errorMessage, code: errorCode } = handleTransactionError(
+        error,
+        "Withdrawing token"
+      );
+
+      if (errorCode == "ACTION_REJECTED") {
+        notify.reject(toastId, "Transaction rejected by user");
+        return null;
+      }
+
+      console.error(errorMessage);
+      notify.fail(toastId, "Failed to withdraw token, Please try again");
+      return null;
+    }
+  };
 };
