@@ -245,13 +245,23 @@ export const Web3Provider = ({ children }) => {
 
       const tx = await contract.updateTokenPrice(parsedPrice);
 
-      notify.update(toastId, "Processing", "Confirming transaction");
+      notify.update(toastId, "Processing", "Confirming price update...");
 
       const receipt = await tx.wait();
+
+      if (receipt.status === 1) {
+        setReCall((prev) => prev + 1);
+        notify.complete(
+          toastId,
+          `Token price updated to ${newPrice} ${CURRENCY}`
+        );
+
+        return receipt;
+      }
     } catch (error) {
       const { message: errorMessage, code: errorCode } = handleTransactionError(
         error,
-        "buying tokens"
+        "updating token price"
       );
 
       if (errorCode == "ACTION_REJECTED") {
@@ -262,7 +272,7 @@ export const Web3Provider = ({ children }) => {
       console.error(errorMessage);
       notify.fail(
         toastId,
-        "Transaction failed, Please try again with sufficient gas"
+        "Price updated failed failed, Please check your permissions"
       );
       return null;
     }
