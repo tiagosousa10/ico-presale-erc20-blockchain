@@ -347,4 +347,42 @@ export const Web3Provider = ({ children }) => {
       return null;
     }
   };
+
+  const rescueTokens = async (tokenAddress) => {
+    if (!contract || !address) return null;
+
+    const toastId = notify.start(`Rescue tokens...`);
+
+    try {
+      const tx = await contract.rescueTokens(tokenAddress);
+
+      notify.update(toastId, "Processing", "Rescuing tokens...");
+
+      const receipt = await tx.wait();
+
+      if (receipt.status === 1) {
+        setReCall((prev) => prev + 1);
+        notify.complete(toastId, `Tokens rescued successfully`);
+
+        return receipt;
+      }
+    } catch (error) {
+      const { message: errorMessage, code: errorCode } = handleTransactionError(
+        error,
+        "Rescuing token"
+      );
+
+      if (errorCode == "ACTION_REJECTED") {
+        notify.reject(toastId, "Transaction rejected by user");
+        return null;
+      }
+
+      console.error(errorMessage);
+      notify.fail(
+        toastId,
+        "Failed to rescued token, Please try again / check address"
+      );
+      return null;
+    }
+  };
 };
