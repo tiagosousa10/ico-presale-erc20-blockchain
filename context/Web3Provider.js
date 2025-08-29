@@ -278,7 +278,7 @@ export const Web3Provider = ({ children }) => {
     }
   };
 
-  const updateTokenSale = async (tokenAddress) => {
+  const setSaleToken = async (tokenAddress) => {
     if (!contract || !address) return null;
 
     const toastId = notify.start(`Setting sale token ...`);
@@ -393,6 +393,12 @@ export const Web3Provider = ({ children }) => {
     )}`;
   };
 
+  const formatTokenAmount = (amount, decimals = 18) => {
+    if (!amount) return 0;
+
+    return ethers.utils.formatUnits(amount, decimals);
+  };
+
   const isOwner = async () => {
     if (!contract || !address) return false;
 
@@ -406,4 +412,68 @@ export const Web3Provider = ({ children }) => {
       return false;
     }
   };
+
+  const addtokenToMetamask = async () => {
+    const toastId = notify.start(`Adding ${TOKEN_SYMBOL} Token to metamask...`);
+
+    try {
+      const wasAdded = await window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: LINKTUM_ADDRESS,
+            symbol: TOKEN_SYMBOL,
+            decimals: TOKEN_DECIMAL,
+            image: TOKEN_LOGO,
+          },
+        },
+      });
+
+      if (wasAdded) {
+        notify.complete(toastId, `Token added to metamask successfully!`);
+      } else {
+        notify.complete(toastId, `Failed to added to metamask!`);
+      }
+    } catch (error) {
+      console.log(error);
+      const { message: errorMessage, code: errorCode } = handleTransactionError(
+        error,
+        "Token adding error"
+      );
+
+      notify.fail(
+        toastId,
+        `Transaction failed: ${
+          errorMessage === "undefined" ? "Not Supported" : errorMessage
+        }`
+      );
+    }
+  };
+
+  const value = {
+    provider,
+    signer,
+    contract,
+    account: address,
+    chainId,
+    isConnected: !!address && !!contract,
+    isConnecting,
+    contractInfo,
+    tokenBalance,
+    error,
+    reCall,
+    globalLoad,
+    buyToken,
+    updateTokenPrice,
+    setSaleToken,
+    withdrawAllTokens,
+    formatAddress,
+    formatTokenAmount,
+    isOwner,
+    setReCall,
+    addtokenToMetamask,
+  };
+
+  return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>;
 };
