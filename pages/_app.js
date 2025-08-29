@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { config } from "../provider/wagmiConfigs";
 
-import { RainbowKitProvider, darkThem } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
-          theme={darkThem({
+          theme={darkTheme({
             accentColor: "#D345EF",
             accentColorForeground: "white",
             borderRadius: "small",

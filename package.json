@@ -27,7 +27,15 @@
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.9",
     "autoprefixer": "^10.4.14",
+    "patch-package": "^8.0.0",
     "postcss": "^8.4.21",
+    "postinstall-postinstall": "^2.1.0",
     "tailwindcss": "^3.3.1"
+  },
+  "overrides": {
+    "@base-org/account": "2.0.2",
+    "@wagmi/connectors": {
+      "@base-org/account": "2.0.2"
+    }
   }
 }
