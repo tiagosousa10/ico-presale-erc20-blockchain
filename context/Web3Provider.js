@@ -385,4 +385,25 @@ export const Web3Provider = ({ children }) => {
       return null;
     }
   };
+
+  const formatAddress = (address) => {
+    if (!address) return "";
+    return `${address.substring(0, 6)}...${address.substring(
+      address.length - 4
+    )}`;
+  };
+
+  const isOwner = async () => {
+    if (!contract || !address) return false;
+
+    try {
+      const ownerAddress = await contract.owner();
+
+      return ownerAddress.toLowerCase() === address.toLowerCase();
+    } catch (error) {
+      const errorMessage = handleTransactionError(error, "withdraw tokens");
+      console.log(errorMessage);
+      return false;
+    }
+  };
 };
