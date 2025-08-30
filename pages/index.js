@@ -38,5 +38,41 @@ export default function Home() {
       document.documentElement.classList.add("dark");
     }
   });
-  return <div>index</div>;
+
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    applyTheme(newMode);
+
+    try {
+      localStorage.setItem("darkMode", newMode.toString());
+    } catch (error) {
+      console.error("Error saving theme preference", error);
+    }
+  };
+
+  const applyTheme = (dark) => {
+    if (typeof document === "undefined") return;
+
+    if (dark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+  return (
+    <div
+      className={`min-h-screen ${
+        isDarkMode ? "bg-black text-white" : "bg-white text-gray-800"
+      } transition-colors duration-300`}
+    >
+      <Head>
+        <title>{TOKEN_NAME} Bridging AI with Decentralization</title>
+        <meta name="description" content="Token ico dapp" />
+        <link rel="icon" href="/logo.png"></link>
+      </Head>
+
+      <Header isDarkMode={isDarkMode} toggle />
+    </div>
+  );
 }
