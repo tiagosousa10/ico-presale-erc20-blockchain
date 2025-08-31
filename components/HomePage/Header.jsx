@@ -59,6 +59,34 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
     };
   }, []);
 
+  const handleMenuLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setActiveMegaMenu(null);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.pageYOffset > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const headerClasses = `w-full transition-all duration-500 ease-out ${
+    isDarkMode
+      ? "bg-[#0e0b12]/95 backdrop-blur-md"
+      : "bg-white/95 backdrop-blur-md"
+  } ${
+    isHeaderSticky
+      ? "fixed top-0 left-0 z-50 w-full shadow-lg animate-slowSlideDown border-b  "
+      : "relative border-b"
+  } ${isDarkMode ? "border-gray-800/50" : "border-gray-200/50"}`;
+
   // Mega menu content
   const megaMenus = {
     ecosystem: {
@@ -188,7 +216,36 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
       },
     },
   };
-  return <div>Header</div>;
+  return (
+    <>
+      {isHeaderSticky && <div className="h-[90px] md:h-[98px]"></div>}
+
+      <header
+        className={`w-full transition-all duration-500 ease-out fixed top-0 left-0 z-50 shadow-lg animate-slowSlideDown border-b ${
+          isDarkMode
+            ? "bg-[#0e0b12]/95 backdrop-blur-md border-gray-800/50"
+            : "bg-white/95 backdrop-blur-md border-gray-200/50 "
+        }`}
+        ref={menuRef}
+      >
+        {!isScrolled && (
+          <div className="relative py-3 overflow-hidden whitespace-nowrap">
+            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white z-0">
+              <div
+                className="absolute inset-0 z-0 opacity-20 "
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px), radial-gradient(circle,rgba(255,255,255,0.1) 1px, transparent 1px)",
+                  backgroundSize: "20px 20px 30px 30px",
+                  backgroundPosition: "0 0, 15px 15px",
+                }}
+              ></div>
+            </div>
+          </div>
+        )}
+      </header>
+    </>
+  );
 };
 
 export default Header;
