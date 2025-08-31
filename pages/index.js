@@ -72,7 +72,11 @@ export default function Home() {
         <link rel="icon" href="/logo.png"></link>
       </Head>
 
-      <Header isDarkMode={isDarkMode} toggle />
+      <Header isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+
+      <main>
+        <HeroSection isDarkMode={isDarkMode} />
+      </main>
     </div>
   );
 }

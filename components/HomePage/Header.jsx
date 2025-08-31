@@ -18,6 +18,7 @@ import {
   FiInfo,
 } from "react-icons/fi";
 import { RiWallet3Line } from "react-icons/ri";
+import CustomConnectButton from "../Global/CustomConnectButton";
 
 const TOKEN_NAME = process.env.NEXT_PUBLIC_TOKEN_NAME;
 const TOKEN_SYMBOL = process.env.NEXT_PUBLIC_TOKEN_SYMBOL;
@@ -31,10 +32,34 @@ const EXPLORER_TOKEN_URL = process.env.NEXT_PUBLIC_EXPLORER_TOKEN_URL;
 const EXPLORER_ADDRESS_URL = process.env.NEXT_PUBLIC_EXPLORER_ADDRESS_URL;
 const TBC_ADDRESS = process.env.NEXT_PUBLIC_TBC_ADDRESS;
 
-const Header = () => {
+const Header = ({ isDarkMode, toggleDarkMode }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [isHeaderSticky, setIsHeaderSticky] = useState(false);
+  const [activeMegaMenu, setActiveMegaMenu] = useState(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const timeoutRef = useRef(null);
+  const menuRef = useRef(null);
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
-   // Mega menu content
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setActiveMegaMenu(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Mega menu content
   const megaMenus = {
     ecosystem: {
       title: "Ecosystem",
