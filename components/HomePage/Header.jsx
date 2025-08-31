@@ -230,19 +230,50 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
       >
         {!isScrolled && (
           <div className="relative py-3 overflow-hidden whitespace-nowrap">
-            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white z-0">
-              <div
-                className="absolute inset-0 z-0 opacity-20 "
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px), radial-gradient(circle,rgba(255,255,255,0.1) 1px, transparent 1px)",
-                  backgroundSize: "20px 20px 30px 30px",
-                  backgroundPosition: "0 0, 15px 15px",
-                }}
-              ></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white z-0"></div>
+
+            <div
+              className="absolute inset-0 z-0 opacity-20 "
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px), radial-gradient(circle,rgba(255,255,255,0.1) 1px, transparent 1px)",
+                backgroundSize: "20px 20px 30px 30px",
+                backgroundPosition: "0 0, 15px 15px",
+              }}
+            ></div>
+
+            <div className="animate-marquee inline-block whitespace-nowrap text-white relative z-10">
+              <span className="mx-4 text-sm md:text-base">
+                {TOKEN_NAME}({TOKEN_SYMBOL})PreSale is NOW ALIVE! Be part of the
+                future-claim your discounted tokens and exclusive access to AI
+                Blockchain technology
+                <span className="mx-1">🌍</span>
+                Don&apos;t wait, join the innovation wave today!
+                <span className="ml-1">🔥</span>
+              </span>
             </div>
           </div>
         )}
+
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <Link href={"/"} className="flex items-center group">
+              <div className="relative w-10 h-10 mr-3 overflow-hidden">
+                <div className="absolute inset-0"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <img
+                    src="/logo.png"
+                    alt="Logo"
+                    className="size-8 object-contain"
+                  />
+                </div>
+              </div>
+              <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x">
+                {TOKEN_NAME}
+              </span>
+            </Link>
+          </div>
+        </div>
       </header>
     </>
   );
