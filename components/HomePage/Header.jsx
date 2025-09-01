@@ -59,7 +59,7 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
     };
   }, []);
 
-  const handleMenuHover = () => {
+  const handleMenuHover = (menuId) => {
     clearTimeout(timeoutRef.current);
     setActiveMegaMenu(menuId);
   };
@@ -354,6 +354,42 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
               LTUM
             </Link>
           </nav>
+
+          <div className="hidden lg:flex items-center space-x-4">
+            <button
+              onClick={toggleDarkMode}
+              className={`p-2 rounded-full transition-all duration-300 ${
+                isDarkMode
+                  ? "bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white"
+                  : " bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white"
+              }`}
+              aria-label={
+                isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+              }
+            >
+              {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
+            </button>
+            <a href="/dashboard" className="group">
+              <div className="size-10 bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 rounded-full flex items-center justify-center transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 ">
+                <span className="text-white">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </a>
+
+            <CustomConnectButton active={true} />
+          </div>
         </div>
       </header>
     </>

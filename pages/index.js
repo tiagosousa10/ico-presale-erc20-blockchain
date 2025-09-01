@@ -23,7 +23,7 @@ export default function Home() {
         systemPrefersDark = false;
       }
 
-      const shouldUseDarkMode = save === "false" ? false : true;
+      const shouldUseDarkMode = saveMode === "false" ? false : true;
 
       setIsDarkMode(shouldUseDarkMode);
 
