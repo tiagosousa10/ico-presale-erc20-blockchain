@@ -30,7 +30,7 @@ const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY;
 const BLOCKCHAIN = process.env.NEXT_PUBLIC_BLOCKCHAIN;
 const EXPLORER_TOKEN_URL = process.env.NEXT_PUBLIC_EXPLORER_TOKEN_URL;
 const EXPLORER_ADDRESS_URL = process.env.NEXT_PUBLIC_EXPLORER_ADDRESS_URL;
-const TBC_ADDRESS = process.env.NEXT_PUBLIC_TBC_ADDRESS;
+const LINKTUM_ADDRESS = process.env.NEXT_PUBLIC_LINKTUM_ADDRESS;
 
 const Header = ({ isDarkMode, toggleDarkMode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,6 +58,11 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleMenuHover = () => {
+    clearTimeout(timeoutRef.current);
+    setActiveMegaMenu(menuId);
+  };
 
   const handleMenuLeave = () => {
     timeoutRef.current = setTimeout(() => {
@@ -123,7 +128,7 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
             {
               icon: <FiCompass className="text-indigo-500" />,
               label: "Explorer",
-              href: `${EXPLORER_TOKEN_URL}${TBC_ADDRESS}`,
+              href: `${EXPLORER_TOKEN_URL}${LINKTUM_ADDRESS}`,
             },
             {
               icon: <FiMap className="text-fuchsia-500" />,
@@ -191,7 +196,7 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
             {
               icon: <FiCompass className="text-fuchsia-500" />,
               label: "Block Explorer",
-              href: `${EXPLORER_ADDRESS_URL}${TBC_ADDRESS}`,
+              href: `${EXPLORER_ADDRESS_URL}${LINKTUM_ADDRESS}`,
             },
             {
               icon: <FiDatabase className="text-indigo-500" />,
@@ -273,6 +278,82 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
               </span>
             </Link>
           </div>
+
+          <nav className="hidden lg:flex items-center space-x-6">
+            <div
+              className="relative group"
+              onMouseEnter={() => handleMenuHover("ecosystem")}
+              onMouseLeave={handleMenuLeave}
+            >
+              <button
+                className={`flex items-center space-x-1 py-2 px-1 transition-colors ${
+                  isDarkMode
+                    ? "text-gray-300 hover:text-fuchsia-500"
+                    : "text-gray-700 hover:text-teal-600"
+                }${activeMegaMenu === "ecosystem" ? "text-fuchsia-500 " : ""}`}
+                onClick={() =>
+                  setActiveMegaMenu(
+                    activeMegaMenu === "ecosystem" ? null : "ecosystem"
+                  )
+                }
+              >
+                <span>Ecosystem</span>
+                <FiChevronDown
+                  className={`transition-transform duration-300 ${
+                    activeMegaMenu === "ecosystem" ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div
+              className="relative group"
+              onMouseEnter={() => handleMenuHover("resources")}
+              onMouseLeave={handleMenuLeave}
+            >
+              <button
+                className={`flex items-center space-x-1 py-2 px-1 transition-colors ${
+                  isDarkMode
+                    ? "text-gray-300 hover:text-fuchsia-500"
+                    : "text-gray-700 hover:text-teal-600"
+                }${activeMegaMenu === "resources" ? "text-fuchsia-500 " : ""}`}
+                onClick={() =>
+                  setActiveMegaMenu(
+                    activeMegaMenu === "resources" ? null : "resources"
+                  )
+                }
+              >
+                <span>Resources</span>
+                <FiChevronDown
+                  className={`transition-transform duration-300 ${
+                    activeMegaMenu === "resources" ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+            </div>
+
+            <Link
+              href={`${EXPLORER_ADDRESS_URL} ${LINKTUM_ADDRESS}`}
+              target="_blank"
+              className={`py-2 px-1 transition-colors ${
+                isDarkMode
+                  ? "text-gray-300 hover:text-fuchsia-500"
+                  : "text-gray-700 hover:text-teal-600"
+              }`}
+            >
+              Explorer
+            </Link>
+            <Link
+              href={`/dashboard`}
+              className={`py-2 px-1 transition-colors ${
+                isDarkMode
+                  ? "text-gray-300 hover:text-fuchsia-500"
+                  : "text-gray-700 hover:text-teal-600"
+              }`}
+            >
+              LTUM
+            </Link>
+          </nav>
         </div>
       </header>
     </>
