@@ -390,7 +390,79 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
 
             <CustomConnectButton active={true} />
           </div>
+
+          <div className="flex lg:hidden items-center space-x-4">
+            <button
+              onClick={toggleDarkMode}
+              className={`p-2 rounded-full transition-all duration-300 ${
+                isDarkMode
+                  ? "bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white"
+                  : " bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white"
+              }`}
+              aria-label={
+                isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+              }
+            >
+              {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
+            </button>
+          </div>
         </div>
+
+        {Object.keys(megaMenus).map((menuKey) => {
+          const menu = megaMenus[menuKey];
+
+          return (
+            <div
+              key={menuKey}
+              className={`absolute left-0 w-full z-40 transition-all duration-300 transform ${
+                activeMegaMenu === menuKey
+                  ? "opacity-100 translate-y-0 pointer-events-auto"
+                  : "opacity-0 -translate-y-2 pointer-events-none"
+              } ${
+                isDarkMode
+                  ? "bg-[#14101A]/95 backdrop-blur-md border-b border-gray-800/50"
+                  : "bg-white/95 backdrop-blur-md border-b border-gray-200/50"
+              } shadow-xl`}
+              onMouseEnter={() => handleMenuHover(menuKey)}
+              onMouseLeave={handleMenuLeave}
+            >
+              <div className="container mx-auto py-8 px-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {menu.columns.map((column, idx) => (
+                    <div key={idx} className="space-y-4">
+                      <h3
+                        className={`text-sm font-bold uppercase tracking-wider ${
+                          isDarkMode ? "text-gray-400" : "text-gray-500"
+                        }`}
+                      >
+                        {column.title}
+                      </h3>
+                      <ul>
+                        {column.links.map((link, idx) => (
+                          <li key={idx}>
+                            <Link
+                              href={link.href}
+                              target="_blank"
+                              className={`flex items-center space-x-2 py-1 transition-colors duration-200 ${
+                                isDarkMode
+                                  ? "text-gray-300 hover:text-fuchsia-500"
+                                  : "text-gray-700 hover:text-teal-600"
+                              }`}
+                              onClick={() => setActiveMegaMenu(null)}
+                            >
+                              <span className="text-lg">{link.icon}</span>
+                              <span>{link.label}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </header>
     </>
   );
