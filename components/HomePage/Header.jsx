@@ -221,6 +221,7 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
       },
     },
   };
+
   return (
     <>
       {isHeaderSticky && <div className="h-[90px] md:h-[98px]"></div>}
@@ -455,6 +456,32 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
                             </Link>
                           </li>
                         ))}
+
+                        <div
+                          className={`rounded-xl p-6 ${menu.featuredBox.bgClass}`}
+                        >
+                          <h3
+                            className={`text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600`}
+                          >
+                            {menu.featuredBox.title}
+                          </h3>
+                          <p
+                            className={`text-sm mb-4 ${
+                              isDarkMode ? "text-gray-300 " : "text-gray-700"
+                            }`}
+                          >
+                            {menu.featuredBox.description}
+                          </p>
+                          <Link
+                            href={menu.featuredBox.linkUrl}
+                            target="_blank"
+                            className="inline-flex items-center space-x-1 font-medium bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600"
+                            onClick={() => setActiveMegaMenu(null)}
+                          >
+                            <span>{menu.featuredBox.linkText}</span>
+                            <span>➡️</span>
+                          </Link>
+                        </div>
                       </ul>
                     </div>
                   ))}
