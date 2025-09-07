@@ -490,9 +490,124 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
             </div>
           );
         })}
+
+        <div
+          className={`lg:hidden fixed inset-y-0 z-50 left-0 w-4/5 max-w-xs transform transition-transform duration-300 ease-in-out ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          } ${
+            isDarkMode
+              ? "bg-[#14101A] border-r border-gray-800/50"
+              : "bg-white border-r border-gray-200/50 "
+          }`}
+          style={{
+            height: "100vh",
+            overflow: "auto",
+          }}
+        >
+          <div className="h-full overflow-auto">
+            <div
+              className={`p-5 border-b ${
+                isDarkMode ? " border-gray-800/50" : " border-gray-200/50"
+              } flex items-center justify-between`}
+            >
+              <Link
+                href={"/"}
+                className="flex items-center"
+                onClick={() => setIsOpen(false)}
+              >
+                <div className="relative w-10 h-10 mr-3 overflow-hidden">
+                  <div className="absolute inset-0"> </div>
+                  <div className="absolute inset-1 flex items-center justify-center">
+                    <img
+                      src="/logo.png"
+                      alt="LOGO"
+                      className="w-6 h-6 object-contain"
+                    />
+                  </div>
+                </div>
+
+                <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x">
+                  {TOKEN_NAME}
+                </span>
+              </Link>
+
+              <button
+                onClick={toggleMenu}
+                className={`focus:outline-none ${
+                  isDarkMode ? "text-fuchsia-500 " : "text-purple-600"
+                }`}
+                aria-label="Close Menu"
+              >
+                <FiX size={24} />
+              </button>
+            </div>
+
+            <div className="p-5">
+              <nav className="flex flex-col">
+                <MobileAccordionItem
+                  title={"Ecosystem"}
+                  isDarkMode={isDarkMode}
+                  items={[
+                    {
+                      icon: <FiActivity className="text-fuchsia-500" />,
+                      label: "Linktum AI",
+                      href: "#",
+                    },
+                    {
+                      icon: <FiCpu className="text-fuchsia-500" />,
+                      label: "AIVM",
+                      href: "#",
+                    },
+                    {
+                      icon: <FiLayers className="text-fuchsia-500" />,
+                      label: "Framework",
+                      href: "#",
+                    },
+                    {
+                      icon: <FiCompass className="text-fuchsia-500" />,
+                      label: "Explorer",
+                      href: "#",
+                    },
+                  ]}
+                  toggleMenu={toggleMenu}
+                />
+
+                <MobileAccordionItem
+                  title={"Resources"}
+                  isDarkMode={isDarkMode}
+                  items={[
+                    {
+                      icon: <FiFileText className="text-fuchsia-500" />,
+                      label: "Whitepaper",
+                      href: "#",
+                    },
+                    {
+                      icon: <FiMap className="text-fuchsia-500" />,
+                      label: "Import Token",
+                      href: "#",
+                    },
+                    {
+                      icon: <FiBook className="text-fuchsia-500" />,
+                      label: "Documentation",
+                      href: "#",
+                    },
+                    {
+                      icon: <FiDatabase className="text-fuchsia-500" />,
+                      label: "Analytics",
+                      href: "#",
+                    },
+                  ]}
+                  toggleMenu={toggleMenu}
+                />
+              </nav>
+            </div>
+          </div>
+        </div>
       </header>
     </>
   );
 };
 
 export default Header;
+
+const MobileAccordionItem = ({ title, items, isDarkMode, toggleMenu }) => {};
