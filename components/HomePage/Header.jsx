@@ -406,6 +406,15 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
             >
               {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
             </button>
+            <button
+              onClick={toggleMenu}
+              className={`focus:outline-none ${
+                isDarkMode ? "text-fuchsia-500" : "text-indigo-500"
+              }`}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </button>
           </div>
         </div>
 
@@ -599,11 +608,65 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
                   ]}
                   toggleMenu={toggleMenu}
                 />
+                <Link
+                  href={`${EXPLORER_ADDRESS_URL} ${LINKTUM_ADDRESS}`}
+                  target="_blank"
+                  className={`flex items-center space-x-2 py-4 border-b ${
+                    isDarkMode
+                      ? "border-gray-800/50 text-gray-300 hover:text-fuchsia-500"
+                      : "border-gray-200/50 text-gray-700 hover:text-fuchsia-600"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FiCompass size={18} />
+                  <span>Explorer</span>
+                </Link>
+
+                <Link
+                  href={`/dashboard`}
+                  className={`flex items-center space-x-2 py-4 border-b ${
+                    isDarkMode
+                      ? "border-gray-800/50 text-gray-300 hover:text-fuchsia-500"
+                      : "border-gray-200/50 text-gray-700 hover:text-fuchsia-600"
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FiInfo size={18} />
+                  <span>Dashboard</span>
+                </Link>
+
+                <div className="mt-8">
+                  <CustomConnectButton />
+                </div>
               </nav>
             </div>
           </div>
         </div>
+
+        {isOpen && (
+          <div
+            className="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300"
+            onClick={toggleMenu}
+          ></div>
+        )}
       </header>
+
+      <style jsx>
+        {`
+          @keyframes marquee {
+            0% {
+              transform: translateX(100%);
+            }
+            100% {
+              transform: translateX(-100%);
+            }
+            .animate-marquee {
+              animation: marquee 20s linear infinite;
+              display: inline-block;
+            }
+          }
+        `}
+      </style>
     </>
   );
 };
