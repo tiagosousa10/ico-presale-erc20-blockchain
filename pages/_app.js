@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
 import { config } from "../provider/wagmiConfigs";
 
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";

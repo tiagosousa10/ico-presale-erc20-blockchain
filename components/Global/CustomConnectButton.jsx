@@ -53,6 +53,7 @@ const CustomConnectButton = ({ active, childStyle }) => {
                         className="size-5"
                       />
                     )}
+                    {chain?.name}
                   </button>
                 )}
 
