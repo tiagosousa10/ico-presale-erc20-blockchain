@@ -95,6 +95,47 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     return { ethPrice };
   }, [contractInfo]);
 
+  //start loading effect when component mounts
+  useEffect(() => {
+    setIsLoading(true);
+
+    //set timeout to hide loader after 3 seconds
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
+    //clean up the timer if component unmounts
+    return () => clearTimeout(timeout);
+  }, []);
+
+  // check if user has enough balance and if token supply is sufficient
+  useEffect(() => {
+    if (!isConnected || !tokenBalances) {
+      setHasSufficientBalance(false);
+      return;
+    }
+  }, []);
+
+  //check if FSX balance is below threshold
+  const lowTokenSupply = parseFloat(tokenBalances?.tbcBalance || "0") < 20;
+
+  if (lowTokenSupply) {
+    setHasSufficientBalance(false);
+    return;
+  }
+
+  const inputAmountFloat = parseFloat(inputAmount) || 0;
+  let hasBalance = false;
+
+  switch (selectedToken) {
+    case "POL":
+      const ethBalance = parseFloat(tokenBalances?.userEthBalance || "0");
+      hasBalance = ethBalance >= inputAmountFloat && inputAmountFloat > 0;
+      break;
+    default:
+      hasBalance = false;
+  }
+
   return <div>HeroSection</div>;
 };
 
