@@ -671,8 +671,6 @@ const Header = ({ isDarkMode, toggleDarkMode }) => {
   );
 };
 
-export default Header;
-
 const MobileAccordionItem = ({ title, items, isDarkMode, toggleMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -730,3 +728,5 @@ const MobileAccordionItem = ({ title, items, isDarkMode, toggleMenu }) => {
     </div>
   );
 };
+
+export default Header;
