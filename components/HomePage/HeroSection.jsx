@@ -63,6 +63,38 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
       : Math.min(parseFloat(percentage.toFixed(2)), 100);
   };
 
+  //calculate handle the price calculations with useMemo to avoid recalculations
+  const prices = useMemo(() => {
+    //default fallback values
+    const defaultEthPrice = contractInfo?.ethPrice;
+
+    let ethPrice;
+
+    try {
+      //handle eth price
+      if (contractInfo?.ethPrice) {
+        //if it's already a bigNumber or a BigNumber-compatible object
+        if (
+          typeof contractInfo.ethPrice === "object" &&
+          contractInfo.ethPrice._isBigNumber
+        ) {
+          ethPrice = contractInfo.ethPrice;
+        } else {
+          //if it's a string, convert it to a bigNumber
+          ethPrice = ethers.utils.parseEther(contractInfo.ethPrice.toString());
+        }
+      } else {
+        // default fallback
+        ethPrice = ethers.utils.parseEther(defaultEthPrice);
+      }
+    } catch (error) {
+      console.error("Error parsing prices:", error);
+      ethPrice = ethers.utils.parseEther(defaultEthPrice);
+    }
+
+    return { ethPrice };
+  }, [contractInfo]);
+
   return <div>HeroSection</div>;
 };
 
