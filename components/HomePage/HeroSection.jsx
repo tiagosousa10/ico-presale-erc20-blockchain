@@ -249,6 +249,57 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     }
   };
 
+  //get token icon/logo based on selected token
+  const getTokenIcon = (token) => {
+    switch (token) {
+      case "POL":
+        return <img src="/polygon.svg" className="w-5 h-5" alt="polygon" />;
+      default:
+        return null;
+    }
+  };
+
+  //theme variables
+  const bgColor = isDarkMode ? "bg-[#0e0b12]" : "bg-[#f5f7fa]";
+  const textColor = isDarkMode ? "text-white" : "text-gray-800";
+  const secondaryTextColor = isDarkMode ? "text-gray-400" : "text-gray-600";
+  const cardBg = isDarkMode ? "bg-[#13101a]" : "bg-white/95";
+  const cardBorder = isDarkMode ? "border-gray-800/30" : "border-gray-100";
+  const inputBg = isDarkMode
+    ? "bg-gray-900/60 border-gray-800/50"
+    : "bg-gray-100 border-gray-200/70";
+  const primaryGradient = "from-fuchsia-500 to-purple-600";
+  const primaryGradientHover = "from-fuchsia-600 to-purple-700";
+  const accentColor = "text-[#7765f3]";
+
+  //token button styling
+
+  //update buttons
+  const getTokenButtonStyle = (token) => {
+    const isSelected = selectedToken === token;
+    const baseClasses =
+      "flex flex-1 items-center justify-center rounded-lg py-2.5 transition-all duration-300";
+
+    if (isSelected) {
+      let selectedColorClass;
+      switch (token) {
+        case "POL":
+          selectedColorClass =
+            "bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white";
+          break;
+        default:
+          selectedColorClass = "";
+      }
+
+      return `${baseClasses} ${selectedColorClass} text-white shadow-lg`;
+    }
+    return `${baseClasses} ${
+      isDarkMode
+        ? "bg-gray-800/40 hover:bg-gray-800/60 text-gray-300"
+        : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+    }`;
+  };
+
   return <div>HeroSection</div>;
 };
 
