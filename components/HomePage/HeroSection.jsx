@@ -213,7 +213,40 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
       console.log(
         `Successfully purchased ${tokenAmount} ${TOKEN_SYMBOL} tokens!`
       );
-    } catch (error) {}
+
+      //reset amounts
+      setInputAmount("0");
+      setTokenAmount("0");
+    } catch (error) {
+      console.error(`Error buying with ${selectedToken} `, error);
+      alert("Transaction failed. Please try again.");
+    }
+  };
+
+  //get current balance based on selected token
+  const getCurrentBalance = () => {
+    if (!tokenBalances) return "0";
+    switch (selectedToken) {
+      case "POL":
+        return tokenBalances.userEthBalance || "0";
+      default:
+        return "0";
+    }
+  };
+
+  //determine button state message
+  const getButtonMessage = () => {
+    if (inputAmount === "0" || inputAmount === "") {
+      return "Enter an amount";
+
+      if (parseFloat(tokenBalances?.tbc || "0") < 20) {
+        return "Insufficient token supply. Please try again later.";
+      }
+
+      return hasSufficientBalance
+        ? `BUY ${TOKEN_SYMBOL}`
+        : `INSUFFICIENT ${selectedToken} BALANCE`;
+    }
   };
 
   return <div>HeroSection</div>;
