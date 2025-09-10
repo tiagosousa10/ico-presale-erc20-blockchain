@@ -163,6 +163,59 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     return calculatedAmount.toFixed(2);
   };
 
+  //handle input amount change
+  const handleAmountChange = (value) => {
+    setInputAmount(value);
+    setTokenAmount(calculateTokenAmount(value, selectedToken));
+  };
+
+  //handle token selection change
+  const handleTokenSelection = (token) => {
+    setSelectedToken(token);
+    setTokenAmount(calculateTokenAmount(inputAmount, token));
+  };
+
+  //execeute purchase based on selected token
+  const executePurchase = async () => {
+    if (!isConnected) {
+      alert("Please connect your wallet first");
+      return;
+    }
+
+    if (parseFloat(inputAmount) <= 0) {
+      alert("Please enter a valid amount");
+      return;
+    }
+
+    if (!hasSufficientBalance) {
+      if (parseFloat(tokenBalances?.fsxBalance || "0") < 20) {
+        alert("Insufficient token supply. Please try again later.");
+      } else {
+        alert(`Insufficient ${selectedToken} balance`);
+      }
+      return;
+    }
+
+    try {
+      let tx;
+      console.log(`Buying with ${inputAmount} ${selectedToken}`);
+
+      switch (selectedToken) {
+        case "POL":
+          tx = await buyToken(inputAmount);
+          break;
+        default:
+          alert("Please select a valid token");
+          return;
+      }
+
+      console.log(tx);
+      console.log(
+        `Successfully purchased ${tokenAmount} ${TOKEN_SYMBOL} tokens!`
+      );
+    } catch (error) {}
+  };
+
   return <div>HeroSection</div>;
 };
 
