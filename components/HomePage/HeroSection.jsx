@@ -114,27 +114,54 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
       setHasSufficientBalance(false);
       return;
     }
-  }, []);
 
-  //check if FSX balance is below threshold
-  const lowTokenSupply = parseFloat(tokenBalances?.tbcBalance || "0") < 20;
+    //check if FSX balance is below threshold
+    const lowTokenSupply = parseFloat(tokenBalances?.tbcBalance || "0") < 20;
 
-  if (lowTokenSupply) {
-    setHasSufficientBalance(false);
-    return;
-  }
+    if (lowTokenSupply) {
+      setHasSufficientBalance(false);
+      return;
+    }
 
-  const inputAmountFloat = parseFloat(inputAmount) || 0;
-  let hasBalance = false;
+    const inputAmountFloat = parseFloat(inputAmount) || 0;
+    let hasBalance = false;
 
-  switch (selectedToken) {
-    case "POL":
-      const ethBalance = parseFloat(tokenBalances?.userEthBalance || "0");
-      hasBalance = ethBalance >= inputAmountFloat && inputAmountFloat > 0;
-      break;
-    default:
-      hasBalance = false;
-  }
+    switch (selectedToken) {
+      case "POL":
+        const ethBalance = parseFloat(tokenBalances?.userEthBalance || "0");
+        hasBalance = ethBalance >= inputAmountFloat && inputAmountFloat > 0;
+        break;
+      default:
+        hasBalance = false;
+    }
+
+    setHasSufficientBalance(hasBalance);
+  }, [isConnected, inputAmount, selectedToken, tokenBalances]);
+
+  //calculate token amount based on input amount and seleceted token
+  const calculateTokenAmount = (amount, token) => {
+    if (isNaN(amount) || parseFloat(amount) <= 0) return "0";
+
+    let calculatedAmount;
+    try {
+      switch (token) {
+        case "POL":
+          //convert eth value to tokens based on contracts formula
+          const amountInWei = ethers.utils.parseEther(amount);
+          const tokensPerEth = ethers.utils.formatEther(prices.ethPrice);
+
+          calculatedAmount = parseFloat(amount) / parseFloat(tokensPerEth);
+          break;
+        default:
+          calculatedAmount = 0;
+      }
+    } catch (error) {
+      console.error(`Error calculating token amount: ${error}`);
+      calculatedAmount = 0;
+    }
+
+    return calculatedAmount.toFixed(2);
+  };
 
   return <div>HeroSection</div>;
 };
