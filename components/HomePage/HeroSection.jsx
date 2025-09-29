@@ -300,6 +300,116 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     }`;
   };
 
+  //2. add the particle animation effect
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    const baseColor = { r: 189, g: 38, b: 211 }; // #bd26d3
+
+    //set canvas to full width and container
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = canvas.parentElement.offsetHeight;
+    };
+
+    resizeCanvas();
+
+    window.addEventListener("resize", resizeCanvas);
+
+    //mouse interaction variables
+    let mouseX = 0;
+    let mouseY = 0;
+
+    const handleMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    //perspective settings
+    const perspective = 400;
+    const focalLength = 300;
+
+    //initialize 3d particles
+    particlesRef.current = Array(particleCount)
+      .fill()
+      .map(() => ({
+        x: Math.random() * canvas.width - canvas.width / 2,
+        y: Math.random() * canvas.height - canvas.height / 2,
+        z: Math.random() * 1000,
+        size: Math.random() * 4 + 2,
+        baseSize: Math.random() * 4 + 2,
+        speedX: Math.random() * 0.5 - 0.25,
+        speedY: Math.random() * 0.5 - 0.25,
+        speedZ: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.5 + 0.3,
+      }));
+
+    const animate = () => {
+      ctx.clearReact(0, 0, canvas.width, canvas.height);
+
+      //sort particles by z-index for proper depth rendering
+      const sortedParticles = [...particlesRef.current].sort(
+        (a, b) => a.z - b.z
+      );
+
+      sortedParticles.forEach((particle) => {
+        //apply mouse influence (slight attraction)
+        const mouseInfluenceX =
+          (mouseX - canvas.width / 2 - particle.x) * 0.0001;
+        const mouseInfluenceY =
+          (mouseY - canvas.height / 2 - particle.y) * 0.0001;
+
+        //update position width subtle mouse influence
+        particle.x += particle.speedX + mouseInfluenceX;
+        particle.y += particle.speedY + mouseInfluenceY;
+        particle.z += particle.speedZ;
+
+        //if particle goes behind the viewer , reset to far distance
+        if (particle.z < -focalLength) {
+          particle.z = Math.random() * 1000;
+          particle.x = Math.random() * canvas.width - canvas.width / 2;
+          particle.y = Math.random() * canvas.height - canvas.height / 2;
+        }
+
+        //calculate 3d projection
+        const scale = focalLength / (focalLength + particle.z);
+        const x2d = particle.x * scale + canvas.width / 2;
+        const y2d = particle.y * scale + canvas.height / 2;
+        const scaledSize = particle.baseSize * scale;
+
+        //calculate color based on depth
+        const distance = 1 - Math.min(particle.z / 1000, 1);
+        const opacity = particle.opacity * distance;
+
+        //apply color variaton based on depth
+        const colorVariation = Math.max(0.6, distance);
+        const r = Math.floor(baseColor.r * colorVariation);
+        const g = Math.floor(baseColor.g * colorVariation);
+        const b = Math.floor(baseColor.b * colorVariation);
+
+        //draw particle
+        ctx.beginPath();
+        ctx.arc(x2d, y2d, scaledSize, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+        ctx.fill();
+
+        //add glow effect for closer particles
+        if (distance > 0.8) {
+          ctx.beginPath();
+          ctx.arc(x2d, y2d, scaledSize * 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity * 0.3})`;
+          ctx.fill();
+        }
+      });
+    };
+  }, []);
+
   return <div>HeroSection</div>;
 };
 
