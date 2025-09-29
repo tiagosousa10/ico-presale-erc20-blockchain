@@ -333,6 +333,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     //perspective settings
     const perspective = 400;
     const focalLength = 300;
+    const particleCount = 100;
 
     //initialize 3d particles
     particlesRef.current = Array(particleCount)
@@ -350,7 +351,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
       }));
 
     const animate = () => {
-      ctx.clearReact(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       //sort particles by z-index for proper depth rendering
       const sortedParticles = [...particlesRef.current].sort(
