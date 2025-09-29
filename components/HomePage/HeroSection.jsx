@@ -534,6 +534,91 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
                 Exclusive Benefits
               </div>
             </div>
+
+            {/* background decorative elements */}
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-r from-teal-400/10 to-indigo-500/10 rounded-full blur-3xl -z-10"></div>
+          </div>
+
+          {/* right side - TOKEN PURCHASE SECTION*/}
+          <div className="w-full md:w-1/2 max-w-md mx-auto relative">
+            {/* loading */}
+            {isLoading && (
+              <div className="absolute inset-0 flex z-20 items-center justify-center bg-black/50 backdrop-blur-sm rounded-xl">
+                <div className=" flex flex-col items-center">
+                  <div className="w-12 h-12 border-4 border-fuchsia-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                </div>
+              </div>
+            )}
+
+            {/* main card */}
+            <div
+              className={`${cardBg} backdrop-blur-sm rounded-xl ${cardBorder} border shadow-xl overflow-hidden transform transition duration-500 hover:shadow-2xl`}
+            >
+              <div className="p-6 md:p-8">
+                {(!tokenBalances?.tbcBalance ||
+                  Number(tokenBalances?.tbcBalance) === 0) && (
+                  <div
+                    className={`text-center text-xs ${secondaryTextColor} mb-4 bg-gradient-to-r from-teal-400/5 to-indigo-500/5 py-2 px-4 rounded-lg`}
+                  >
+                    Can't find tokens in your wallet?
+                  </div>
+                )}
+
+                {/* card header */}
+                <div className="text-center">
+                  <div className="inline-block p-1.5 px-3 rounded-full bg-gradient-to-r from-teal-400/10 to-indigo-500/10 mb-2">
+                    <p className="text-xs font-medium bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x">
+                      Limited Time Offer
+                    </p>
+                  </div>
+                  <h3 className="text-xl text-center font-bold mb-1 bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x">
+                    Stage 1 - Buy {TOKEN_SYMBOL} Now
+                  </h3>
+
+                  <div
+                    className={`text-center text-sm ${secondaryTextColor} mb-4`}
+                  >
+                    Until price increase
+                  </div>
+                </div>
+
+                {/* price information */}
+                <div className="flex justify-between items-center text-sm mb-3 px-1">
+                  <div className={`${secondaryTextColor} flex flex-col`}>
+                    <span className="text-xs mb-1">Current Price</span>
+                    <span className={`${textColor} font-medium`}>
+                      {PER_TOKEN_USD_PRICE} {CURRENCY}
+                    </span>
+                  </div>
+                  <div className="h-10 w-px bg-gradient-to-b from-transparent via-gray-500/20 to-transparent"></div>
+                  <div
+                    className={`${secondaryTextColor} flex flex-col text-right`}
+                  >
+                    <span className="text-xs mb-1">Next Stage Price</span>
+                    <span className={`${textColor} font-medium`}>
+                      {NEXT_PER_TOKEN_USD_PRICE} {CURRENCY}
+                    </span>
+                  </div>
+                </div>
+
+                {/* progress bar */}
+                <div
+                  className={`w-full h-4 ${
+                    isDarkMode ? "bg-gray-800/70" : "bg-gray-200/70"
+                  } rounded-full mb-3 overflow-hidden`}
+                >
+                  <div
+                    className={`h-full rounded-full bg-gradient-to-r ${primaryGradient} animated-progress relative`}
+                    style={{
+                      width: `${Math.max(0.5, calculateProgressPercentage())}%`,
+                    }}
+                    key={`progress-${calculateProgressPercentage()}`}
+                  >
+                    <div className="absolute top-0 left-0 w-full h-full bg-white/10 shimmer-effect"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
