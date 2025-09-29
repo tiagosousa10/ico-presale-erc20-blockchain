@@ -301,7 +301,6 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
   };
 
   //2. add the particle animation effect
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -407,10 +406,53 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
           ctx.fill();
         }
       });
-    };
-  }, []);
 
-  return <div>HeroSection</div>;
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    //cleanup
+    return () => {
+      cancelAnimationFrame(animationRef.current);
+      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [isDarkMode]);
+
+  return (
+    <div className={` relative mt-12 w-full overflow-hidden ${bgColor}`}>
+      {/* background width glowing animation */}
+      <div className="absolute inset-0 z-0">
+        {/* gradient */}
+        <div
+          className={`absolute inset-0 ${
+            isDarkMode
+              ? "bg-gradient-to-b from-[#0E0b12]/80 via-transparent to-[#0e0b12]/80 "
+              : "bg-gradient-to-b from-[#f3f3f7]/80 via-transparent to-[#f3f3f7]/80 "
+          }`}
+        ></div>
+
+        <canvas
+          ref={canvasRef}
+          className="absolute top-0 left-0 w-full h-full pointer-events-none z-10"
+          style={{ zIndex: 1 }}
+        />
+
+        {/* animated glowing grid pattern */}
+        <div className="absolute inset-0 grid-pattern"></div>
+
+        {/* moving light effects */}
+        <div className="absolute inset-0 light-rays">
+          <div className="light-ray ray1"></div>
+          <div className="light-ray ray2"></div>
+          <div className="light-ray ray3"></div>
+        </div>
+      </div>
+
+      {/* MAIN CONTENT */}
+    </div>
+  );
 };
 
 export default HeroSection;
