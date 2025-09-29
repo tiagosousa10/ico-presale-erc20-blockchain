@@ -451,6 +451,92 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
       </div>
 
       {/* MAIN CONTENT */}
+      <div className="container mx-auto px-4 py-28 md:py-32 relative z-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-16">
+          {/* left side content - text and graphics */}
+          <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
+            {/* header content */}
+            <div className="inline-block p-2 px-4 rounded-full bg-gradient-to-r from-teal-400/10 to-indigo-500/10 mb-6">
+              <p className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x">
+                Presale Now Live
+              </p>
+            </div>
+
+            <h1
+              className={`text-4xl md:text-5xl lg:text-6xl font-bold ${textColor} mb-4`}
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x">
+                {TOKEN_NAME}
+              </span>
+            </h1>
+
+            <h2 className="text-2xl md:text-3xl font-bold mb-6">
+              <span className="bg-clipt-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x  ">
+                Token
+              </span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+                {" "}
+                Sale
+              </span>
+              <span className={textColor}>Stage 1</span>
+            </h2>
+
+            <p
+              className={`${secondaryTextColor} text-base md:text-lg max-w-md mb-8 leading-relaxed`}
+            >
+              Revolutionizing intelligence through decentralized innovation.
+              Join the future of blockchain technology today.
+            </p>
+
+            {/* feature highlights */}
+            <div className="flex flex-wrap gap-4 mb-8">
+              <div
+                className={`px-4 py-2 rounded-full ${
+                  isDarkMode ? "bg-teal-500/10" : "bg-teal-100"
+                } ${
+                  isDarkMode ? "text-fuchsia-500 " : "text-teal-700"
+                } text-sm font-medium flex items-center`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Limited Presale
+              </div>
+
+              <div
+                className={`px-4 py-2 rounded-full ${
+                  isDarkMode ? "bg-indigo-500/10" : "bg-indigo-100  "
+                } ${
+                  isDarkMode ? "text-indigo-300" : "text-indigo-700"
+                } text-sm font-medium flex items-center`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Exclusive Benefits
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
