@@ -618,6 +618,58 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
                     <div className="absolute top-0 left-0 w-full h-full bg-white/10 shimmer-effect"></div>
                   </div>
                 </div>
+
+                {/* progress bar */}
+                <div className="flex justify-between text-xs mb-6 px-1">
+                  <div className={secondaryTextColor}>
+                    Total Raised:
+                    <span>
+                      {" "}
+                      {parseFloat(contractInfo?.totalSold || 0) *
+                        parseFloat(PER_TOKEN_USD_PRICE || 0) >
+                      0
+                        ? (
+                            parseFloat(contractInfo?.totalSold || 0) *
+                            parseFloat(PER_TOKEN_USD_PRICE || 0)
+                          ).toFixed(2)
+                        : "0"}{" "}
+                      POL
+                    </span>
+                  </div>
+                  <div className={`${secondaryTextColor} font-medium`}>
+                    <span className="text-fuchsia-500 fonsemibold">
+                      {calculateProgressPercentage()}%
+                    </span>{" "}
+                    Complete
+                  </div>
+                </div>
+
+                {/* divider */}
+                <div
+                  className={`border-t ${
+                    isDarkMode ? "border-gray-800/50" : "border-gray-200/50 "
+                  } my-5`}
+                ></div>
+
+                {/* token price */}
+                <div className="flex items-center justify-center space-x-3 mb-6">
+                  <div className="size-10 rounded-full bg-gradient-to-r from-fuchsia-500/20 to-purple-600/20 flex items-center justify-center">
+                    <span className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600">
+                      1
+                    </span>
+                  </div>
+                  <span className={`${textColor} text-lg font-medium`}>
+                    {TOKEN_SYMBOL} ={" "}
+                  </span>
+
+                  <div className="px-3 py-1 rounded-lg bg-gradient-to-r from-teal-400/10 to-indigo-500/10">
+                    <span className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600">
+                      {PER_TOKEN_USD_PRICE} &nbsp; {CURRENCY}
+                    </span>
+                  </div>
+                </div>
+
+                {/* token selection */}
               </div>
             </div>
           </div>
