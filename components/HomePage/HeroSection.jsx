@@ -743,7 +743,105 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
                         <span className={`text-xs ${secondaryTextColor}`}>
                           {TOKEN_SYMBOL}
                         </span>
+                        <div className="w-6 h-6 flex items-center justify-center">
+                          <img
+                            src="/logo.png"
+                            alt={TOKEN_SYMBOL}
+                            className="w-5 h-5"
+                          />
+                        </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* action button */}
+                {isConnected ? (
+                  <>
+                    <button
+                      onClick={executePurchase}
+                      disabled={!hasSufficientBalance}
+                      className={`w-full ${
+                        hasSufficientBalance
+                          ? "bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700"
+                          : isDarkMode
+                          ? "bg-gray-700/70 cursor-not-allowed"
+                          : "bg-gray-300 cursor-not-allowed"
+                      } text-white rounded-lg py-4 mb-4 flex items-center justify-center transition-all duration-300 shadow-lg font-medium ${
+                        hasSufficientBalance
+                          ? "hover:shadow-purple-500/20 hover:scale-[1.01]"
+                          : ""
+                      }`}
+                    >
+                      {getButtonMessage()}
+                    </button>
+
+                    {/* refer a friend button */}
+                    <button
+                      onClick={() => addtokenToMetamask()}
+                      className={`w-full hidden lg:flex bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white rounded-lg py-4 mb-4 flex items-center justify-center transition-all duration-300 shadow-lg font-medium `}
+                    >
+                      <img
+                        src="/logo.png"
+                        alt={TOKEN_SYMBOL}
+                        className={`w-5 h-5`}
+                      />{" "}
+                      &nbsp;
+                      <span>Add Token to MetaMask</span>
+                    </button>
+                  </>
+                ) : (
+                  <CustomConnectButton
+                    childStyle={
+                      "w-full mb-4 py-4 rounded-lg flex items-center justify-center gap-2 font-medium"
+                    }
+                  />
+                )}
+
+                {/* help links */}
+                <div className="flex flex-col space-y-2 text-xs">
+                  <div
+                    className={`p3 rounded-lg ${
+                      isDarkMode ? "bg-gray-800/30" : "bg-gray-100/70"
+                    } bg-1`}
+                  >
+                    <div className="flex items-center space-x-3 mb-2">
+                      <AiOutlineQuestionCircle
+                        className={`text-lg text-[#7765f3]`}
+                      />
+                      <h4 className={`font-medium ${textColor} `}>
+                        Need Help?
+                      </h4>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <a
+                        href={"/dashboard/"}
+                        className={`${secondaryTextColor} hover:${textColor} flex items-center text-xs transition-colors duration-200 px-2 py-1 rounded hover:bg-gray-700/20`}
+                      >
+                        <span className="mr-1">º</span>
+                        How to Buy
+                      </a>
+                      <a
+                        href="/dashboard"
+                        className={`${secondaryTextColor} hover:${textColor} flex items-center text-xs transition-colors duration-200 px-2 py-1 rounded hover:bg-gray-700/20`}
+                      >
+                        <span className="mr-1">º</span>
+                        Wallet Connection
+                      </a>
+                      <a
+                        href="#TokenInfo"
+                        className={`${secondaryTextColor} hover:${textColor} flex items-center text-xs transition-colors duration-200 px-2 py-1 rounded hover:bg-gray-700/20`}
+                      >
+                        <span className="mr-1">º</span>
+                        Token Info
+                      </a>
+                      <a
+                        href="#FAQ"
+                        className={`${secondaryTextColor} hover:${textColor} flex items-center text-xs transition-colors duration-200 px-2 py-1 rounded hover:bg-gray-700/20`}
+                      >
+                        <span className="mr-1">º</span>
+                        FAQ
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -752,6 +850,135 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
           </div>
         </div>
       </div>
+
+      {/* scroll to top button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className={`w-10 h-10 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x hover:from-fuchsia-600 hover:to-purple-700 text-white shadow-lg shadow-indigo-500/20 flex items-center justify-center transition-all duration-300 hover:scale-110`}
+          aria-label="Scroll to top"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+
+      {/* css for animations */}
+      <style jsx>
+        {`
+          @keyframes pulse-slow {
+            0%,
+            100% {
+              opacity:0.8;
+              transform: scale(1);
+            }
+            50% {
+              opacity:1;
+              transform: scale(1.02}
+            }
+          }
+          .animate-pulse-slow {
+              animation: pulse-slow 3s  infinite;
+          }
+          .animate-progress {
+            animation: progress 1.5s ease-out
+          }
+          @keyframes progress {
+            0%{
+              width: 0%;
+            }
+            100%{
+              width: ${Math.max(0.5, calculateProgressPercentage())}%;
+            }
+          }
+          .grid-pattern {
+          background-image : ${
+            isDarkMode
+              ? "linear-gradient(rgba(56,189,248,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.06) 1px, transparent 1px)  "
+              : "linear-gradient(rgba(79,70,229,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(79,70,229,0.08) 1px, transparent 1px)  "
+          }
+          background-size: 35px 35px;
+          animation: pulse-grid 8s ease-in-out infinite alternate;
+          }
+
+          @keyframes pulse-grid {
+            0% {
+              opacity:0.7;
+              background-size: 35px 35px;
+            }
+            100% {
+              opacity:1;
+              background-size: 36px 36px;
+            }
+          }
+          .light-rays {
+            overflow:hidden;
+            opacity: ${isDarkMode ? "0.4" : "0.3"}
+          }
+          .light-ray {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0%, ${
+              isDarkMode
+                ? "rgba(119,101,243,0.05) 45%, rgba(146,101,243,0.1) 50%, rgba(119,101,243,0.05) 55%"
+                : "rgba(119,101,243,0.03) 45%, rgba(146,101,243,0.07) 50%, rgba(119,101,243,0.03) 55% "
+            },
+            transparent 100% );
+            transform: rotate(45deg);
+            top: -50%;
+            left: -50%;
+          }
+          .ray1 {
+          animation: moveRay 15s linear infinite;
+          }
+          .ray2 {
+          animation: moveRay 20s linear  5s infinite;
+          }
+          .ray3 {
+          animation: moveRay 25s linear  10s infinite;
+          }
+
+          @keyframes moveRay {
+            0% {
+              transform: rotate(45deg) translateX(-100%);
+            }
+            100% {
+              transform: rotate(45deg) translateX(100%);
+            }
+          }
+
+          .shimmer-effect {
+            animation: shimmer 2s infinite linear;
+            background: linear-gradient(
+              to right,
+              rgba(255, 255, 255, 0) 0%,
+              rgba(255, 255, 255, 0.2) 50%,
+              rgba(255, 255, 255, 0) 100%,
+            );
+            background-size: 200% 100%;
+          }
+
+          @keyframes shimmer {
+            0% {
+              background-position: -200% 0;
+            }
+            100% {
+              background-position: 200% 0;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };
