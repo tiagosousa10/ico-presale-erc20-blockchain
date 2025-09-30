@@ -670,6 +670,83 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
                 </div>
 
                 {/* token selection */}
+                <div className="flex space-x-2 mb-4">
+                  <button
+                    onClick={() => handleTokenSelection("POL")}
+                    className={getTokenButtonStyle("POL")}
+                  >
+                    <img
+                      src="/polygon.svg"
+                      alt="POL"
+                      className={`mr-2 w-4 h-4 ${
+                        selectedToken === "POL" ? "filter brightness-200" : ""
+                      }`}
+                    />
+                    Pay with {CURRENCY}
+                  </button>
+                </div>
+
+                {/* balance display */}
+                <div
+                  className={`text-sm ${secondaryTextColor} text-center mb-6 py-2 p-4 rounded-lg ${
+                    isDarkMode ? "bg-gray-800/30" : "bg-gray-100/70"
+                  }`}
+                >
+                  <span className="mr-2">{selectedToken} Balance:</span>
+                  <span className={`${textColor} font-medium`}>
+                    {getCurrentBalance()}
+                  </span>
+                  <span className="ml-1"> {selectedToken}</span>
+                </div>
+
+                {/* amount inputs */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                  <div>
+                    <label
+                      className={`block ${secondaryTextColor} text-xs mb-1 font-medium`}
+                    >
+                      Pay with {selectedToken}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={inputAmount}
+                        onChange={(e) => handleAmountChange(e.target.value)}
+                        className={`w-full ${inputBg} rounded-lg border px-4 py-3 ${textColor} focus:ring-1 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200`}
+                      />
+                      <div
+                        className={`absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2`}
+                      >
+                        <span className={`text-xs ${secondaryTextColor}`}>
+                          {selectedToken}
+                        </span>
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center">
+                          {getTokenIcon(selectedToken)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      className={`block ${secondaryTextColor} text-xs mb-1 font-medium}`}
+                    >
+                      Receive {TOKEN_SYMBOL}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={tokenAmount}
+                        readOnly
+                        className={`w-full ${inputBg} rounded-lg border px-4 py-3 ${textColor}`}
+                      />
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+                        <span className={`text-xs ${secondaryTextColor}`}>
+                          {TOKEN_SYMBOL}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
