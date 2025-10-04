@@ -17,6 +17,7 @@ const NEXT_PER_TOKEN_USD_PRICE =
   process.env.NEXT_PUBLIC_NEXT_PER_TOKEN_USD_PRICE;
 const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY;
 const BLOCKCHAIN = process.env.NEXT_PUBLIC_BLOCKCHAIN;
+const LINKTUM_ADDRESS = process.env.NEXT_PUBLIC_LINKTUM_ADDRESS;
 
 const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
   const {
@@ -26,9 +27,10 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     tokenBalances,
     buyToken,
     addtokenToMetamask,
+    setSaleToken,
   } = useWeb3();
 
-  const [selectedToken, setSelectedToken] = useState("POL");
+  const [selectedToken, setSelectedToken] = useState("ETH");
   const [inputAmount, setInputAmount] = useState("0");
   const [tokenAmount, setTokenAmount] = useState("0");
   const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
@@ -39,6 +41,10 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
   const animationRef = useRef(null);
+
+  const setToken = () => {
+    setSaleToken(LINKTUM_ADDRESS);
+  };
 
   //calculate progress percentage based on sold tokens vs total supply
   const calculateProgressPercentage = () => {
@@ -127,7 +133,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     let hasBalance = false;
 
     switch (selectedToken) {
-      case "POL":
+      case "ETH":
         const ethBalance = parseFloat(tokenBalances?.userEthBalance || "0");
         hasBalance = ethBalance >= inputAmountFloat && inputAmountFloat > 0;
         break;
@@ -145,7 +151,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     let calculatedAmount;
     try {
       switch (token) {
-        case "POL":
+        case "ETH":
           //convert eth value to tokens based on contracts formula
           const amountInWei = ethers.utils.parseEther(amount);
           const tokensPerEth = ethers.utils.formatEther(prices.ethPrice);
@@ -201,7 +207,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
       console.log(`Buying with ${inputAmount} ${selectedToken}`);
 
       switch (selectedToken) {
-        case "POL":
+        case "ETH":
           tx = await buyToken(inputAmount);
           break;
         default:
@@ -227,7 +233,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
   const getCurrentBalance = () => {
     if (!tokenBalances) return "0";
     switch (selectedToken) {
-      case "POL":
+      case "ETH":
         return tokenBalances.userEthBalance || "0";
       default:
         return "0";
@@ -252,8 +258,8 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
   //get token icon/logo based on selected token
   const getTokenIcon = (token) => {
     switch (token) {
-      case "POL":
-        return <img src="/polygon.svg" className="w-5 h-5" alt="polygon" />;
+      case "ETH":
+        return <img src="/ethereum.svg" className="w-5 h-5" alt="ethereum" />;
       default:
         return null;
     }
@@ -283,7 +289,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
     if (isSelected) {
       let selectedColorClass;
       switch (token) {
-        case "POL":
+        case "ETH":
           selectedColorClass =
             "bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white";
           break;
@@ -461,6 +467,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
               <p className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x">
                 Presale Now Live
               </p>
+              <button onClick={() => setToken()}>SET TOKEN</button>
             </div>
 
             <h1
@@ -472,14 +479,14 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
             </h1>
 
             <h2 className="text-2xl md:text-3xl font-bold mb-6">
-              <span className="bg-clipt-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x  ">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x ">
                 Token
               </span>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
                 {" "}
                 Sale
               </span>
-              <span className={textColor}>Stage 1</span>
+              <span className={textColor}> Stage 1</span>
             </h2>
 
             <p
@@ -633,7 +640,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
                             parseFloat(PER_TOKEN_USD_PRICE || 0)
                           ).toFixed(2)
                         : "0"}{" "}
-                      POL
+                      ETH
                     </span>
                   </div>
                   <div className={`${secondaryTextColor} font-medium`}>
@@ -672,14 +679,14 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
                 {/* token selection */}
                 <div className="flex space-x-2 mb-4">
                   <button
-                    onClick={() => handleTokenSelection("POL")}
-                    className={getTokenButtonStyle("POL")}
+                    onClick={() => handleTokenSelection("ETH")}
+                    className={getTokenButtonStyle("ETH")}
                   >
                     <img
-                      src="/polygon.svg"
-                      alt="POL"
+                      src="/ethereum.svg"
+                      alt="ETH"
                       className={`mr-2 w-4 h-4 ${
-                        selectedToken === "POL" ? "filter brightness-200" : ""
+                        selectedToken === "ETH" ? "filter brightness-200" : ""
                       }`}
                     />
                     Pay with {CURRENCY}

@@ -129,7 +129,7 @@ export const Web3Provider = ({ children }) => {
             tokenContract.totalSupply(),
           ]);
 
-          setTokenBalance({
+          setTokenBalance((prev) => ({
             ...prev,
             usertbcBalance: ethers.utils.formatUnits(
               userTokenBalance,
@@ -143,7 +143,7 @@ export const Web3Provider = ({ children }) => {
               info.tokenBalance,
               tokenDecimals
             ),
-          });
+          }));
         }
 
         setGlobalLoad(false);
