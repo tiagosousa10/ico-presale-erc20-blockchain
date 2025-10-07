@@ -52,7 +52,7 @@ export const Web3Provider = ({ children }) => {
     totalSold: "0",
   });
 
-  const [tokenBalance, setTokenBalance] = useState({
+  const [tokenBalances, setTokenBalances] = useState({
     usertbcBalance: "0",
     contractEthBalance: null,
     totalSupply: null,
@@ -103,7 +103,7 @@ export const Web3Provider = ({ children }) => {
         setContract({
           tbcAddress: info.tokenAddress,
           tbcBalance: ethers.utils.formatUnits(
-            info.tokenBalance,
+            info.tokenBalances,
             tokenDecimals
           ),
           ethPrice: ethers.utils.formatUnits(info.ethPrice, 18),
@@ -129,7 +129,7 @@ export const Web3Provider = ({ children }) => {
             tokenContract.totalSupply(),
           ]);
 
-          setTokenBalance((prev) => ({
+          setTokenBalances((prev) => ({
             ...prev,
             usertbcBalance: ethers.utils.formatUnits(
               userTokenBalance,
@@ -140,7 +140,7 @@ export const Web3Provider = ({ children }) => {
             userEthBalance: ethers.utils.formatUnits(userEthBalance),
             ethPrice: ethers.utils.formatUnits(info.ethPrice, 18),
             tbcBalance: ethers.utils.formatUnits(
-              info.tokenBalance,
+              info.tokenBalances,
               tokenDecimals
             ),
           }));
@@ -460,7 +460,7 @@ export const Web3Provider = ({ children }) => {
     isConnected: !!address && !!contract,
     isConnecting,
     contractInfo,
-    tokenBalance,
+    tokenBalances,
     error,
     reCall,
     globalLoad,

@@ -232,6 +232,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
   //get current balance based on selected token
   const getCurrentBalance = () => {
     if (!tokenBalances) return "0";
+
     switch (selectedToken) {
       case "ETH":
         return tokenBalances.userEthBalance || "0";
@@ -467,7 +468,7 @@ const HeroSection = ({ isDarkMode, setIsReferralPopupOpen }) => {
               <p className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-600 animate-gradient-x">
                 Presale Now Live
               </p>
-              <button onClick={() => setToken()}>SET TOKEN</button>
+              {/* <button onClick={() => setToken()}>SET TOKEN</button> */}
             </div>
 
             <h1
