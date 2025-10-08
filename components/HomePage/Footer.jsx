@@ -39,6 +39,132 @@ const Footer = ({ isDarkMode }) => {
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-teal-400/5 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl"></div>
       </div>
+
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12">
+          {/* logo and description */}
+          <div className="lg:col-span-2">
+            <div className="mb-6">
+              <div className="inline-flex items-center space-x-2">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center">
+                  <img src="/logo.png" alt="" />
+                </div>
+                <h3 className={`text-xl font-bold ${headingColor}`}>
+                  LINKTUM AI
+                </h3>
+              </div>
+            </div>
+            <p
+              className={`text-sm ${textColorSecondary} max-w-md mb-6 leading-relaxed`}
+            >
+              Revolutionizing intelligence through decentralized innovation. Our
+              AI-driven platform empowers individuals to harness the power of
+              collective intelligence, unlocking new possibilities for
+              innovation, collaboration, and personal growth.
+            </p>
+
+            <div className="flex flex-wrap space-x-5 mt-6">
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-r from-teal-400/10 to-indigo-500/10 hover:from-fuchsia-500 hover:to-purple-600 transition-all duration-300 group"
+                aria-label="Twitter"
+              >
+                <FaTwitter
+                  size={18}
+                  className={`${textColorSecondary} group-hover:text-white transition-colors`}
+                />
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-r from-teal-400/10 to-indigo-500/10 hover:from-fuchsia-500 hover:to-purple-600 transition-all duration-300 group"
+                aria-label="Telegram"
+              >
+                <FaTelegram
+                  size={18}
+                  className={`${textColorSecondary} group-hover:text-white transition-colors`}
+                />
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-r from-teal-400/10 to-indigo-500/10 hover:from-fuchsia-500 hover:to-purple-600 transition-all duration-300 group"
+                aria-label="Discord"
+              >
+                <FaDiscord
+                  size={18}
+                  className={`${textColorSecondary} group-hover:text-white transition-colors`}
+                />
+              </a>
+            </div>
+            {/* newsletter signup */}
+            <div className="mt-8 p-4 rounded-xl bg-gradient-to-r from-teal-400/5 to-indigo-500/5 backdrop-blur-sm">
+              <h4 className="text-sm font-semibold mb-2">
+                Stay updated with our newsletter
+              </h4>
+              <form onSubmit={handleSubmit}>
+                {/* success message */}
+                {state.succeeded && (
+                  <div className={`mb-4 p-3 rounded-lg flex items-start gap-2`}>
+                    <FaCheck className="mt-1 flex-shrink-0" />
+                    <span>
+                      Your message has been sent successfully! We'll get back to
+                      you soon.
+                    </span>
+                  </div>
+                )}
+                <div className="flex">
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="your@email.com"
+                    className={`flex-grow px-4 py-2 text-sm rounded-l-lg focus:outline-none ${
+                      isDarkMode
+                        ? "bg-gray-800 border-gray-700"
+                        : "bg-white border-gray-200"
+                    } border`}
+                  />
+                  <ValidationError
+                    prefix="Email"
+                    field="email"
+                    errors={state.errors}
+                  />
+
+                  <button
+                    disabled={state.submitting}
+                    className={`px-4 py-2 bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white rounded-r-lg text-sm whitespace-nowrap hover:from-fuchsia-500 hover:to-purple-600 transition-all duration-300`}
+                  >
+                    {state.submitting ? (
+                      <>
+                        <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                        Subscribing...
+                      </>
+                    ) : (
+                      <>Subscribe</>
+                    )}
+                  </button>
+                </div>{" "}
+              </form>
+            </div>
+          </div>
+          {/* resources column */}
+          <div>
+            <h3 className="text-lg font-semibold mb-5">Resources</h3>
+            <ul className="space-y-3">
+              {["Whitepaper", "Roadmap", "Documentation"].map((item, index) => (
+                <li key={`resource-${index}`}>
+                  <Link
+                    href={`/dashboard`}
+                    className={`text-sm ${textColorSecondary} ${linkHoverColor} transition-all duration-300 flex items-center group`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-600 mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 };
