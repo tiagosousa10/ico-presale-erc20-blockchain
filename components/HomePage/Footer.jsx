@@ -163,6 +163,42 @@ const Footer = ({ isDarkMode }) => {
               ))}
             </ul>
           </div>
+
+          {/* community column */}
+          <div>
+            <h3 className="text-lg font-semibold mb-5">Community</h3>
+            <ul className="space-y-3">
+              {["Events", "Partners", "Bounty Program"].map((item, index) => (
+                <li key={`community-${index}`}>
+                  <Link
+                    href={`/dashboard`}
+                    className={`text-sm ${linkHoverColor} transition-all duration-300 flex items-center group`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-600 mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* contact column */}
+          <div>
+            <h3 className="text-lg font-semibold mb-5">Contact</h3>
+            <ul className="space-y-3">
+              {["Support", "Contact Us"].map((item, index) => (
+                <li key={`contact-${index}`}>
+                  <Link
+                    href={`/dashboard`}
+                    className={`text-sm ${linkHoverColor} transition-all duration-300 flex items-center group`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-600 mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </footer>
