@@ -200,6 +200,30 @@ const Footer = ({ isDarkMode }) => {
             </ul>
           </div>
         </div>
+        {/* bottom section with copyright and legal links */}
+        <div
+          className={`mt-16 pt-8 border-t ${borderColor} flex flex-col md:flex-row justify-between items-center`}
+        >
+          <p className={`text-sm ${textColorTertiary} mb-4 md:mb-0`}>
+            &copy; {new Date().getFullYear()} Linktum AI Protocol. All rights
+            reserved.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-6">
+            {["Terms of Service", "Privacy Policy"].map((item, index) => (
+              <Link
+                target="_blank"
+                key={`legal-${index}`}
+                href={
+                  "/https://linktum.gitbook.io/linktum/details/privacy-policy"
+                }
+                className={`text-sm ${textColorTertiary} ${linkHoverColor} transition-all duration-300`}
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </footer>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import { Header, HeroSection } from "../components/HomePage/index";
+import { Footer, Header, HeroSection } from "../components/HomePage/index";
 
 const TOKEN_NAME = process.env.NEXT_PUBLIC_TOKEN_NAME;
 
@@ -77,6 +77,7 @@ export default function Home() {
       <main>
         <HeroSection isDarkMode={isDarkMode} />
       </main>
+      <Footer isDarkMode={isDarkMode} />
     </div>
   );
 }
